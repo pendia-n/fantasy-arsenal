@@ -1,0 +1,80 @@
+<div id="fmFountainProcessVisual">
+  <style>
+    #fmFountainProcessVisual { --ff-bg: light-dark(#f7fbf8, #0b1719); --ff-fg: light-dark(#16302f, #e5eee9); --ff-muted: light-dark(#55706a, #91aaa3); --ff-line: light-dark(#c9dcd5, #2a4a4a); --ff-surface: light-dark(#ffffff, #12292c); --ff-surface-2: light-dark(#eef7f2, #173236); --ff-teal: light-dark(#147d6e, #6be0c6); --ff-copper: light-dark(#a05c20, #e8a362); --ff-radius: 16px; color: var(--ff-fg); font-family: ui-sans-serif, system-ui, sans-serif; background: var(--ff-bg); padding: 18px; border-radius: var(--ff-radius); }
+    #fmFountainProcessVisual * { box-sizing: border-box; }
+    #fmFountainProcessVisual h2, #fmFountainProcessVisual p { margin: 0; }
+    #fmFountainProcessVisual h2 { font-size: 20px; font-weight: 600; letter-spacing: -.02em; }
+    #fmFountainProcessVisual p { color: var(--ff-muted); font-size: 12px; line-height: 1.5; }
+    #fmFountainProcessVisual .ff-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 18px; }
+    #fmFountainProcessVisual .ff-kicker { color: var(--ff-teal); text-transform: uppercase; letter-spacing: .14em; font: 500 10px ui-monospace, monospace; margin-bottom: 7px; }
+    #fmFountainProcessVisual .ff-head p { text-align: right; max-width: 270px; }
+    #fmFountainProcessVisual .ff-steps { display: grid; grid-template-columns: repeat(6, minmax(92px, 1fr)); gap: 7px; position: relative; }
+    #fmFountainProcessVisual .ff-steps::before { content: ""; position: absolute; left: 9%; right: 9%; top: 22px; height: 1px; background: var(--ff-line); z-index: 0; }
+    #fmFountainProcessVisual .ff-step { border: 1px solid var(--ff-line); background: var(--ff-surface); color: var(--ff-muted); border-radius: 10px; padding: 9px 8px; min-height: 72px; text-align: left; cursor: pointer; position: relative; z-index: 1; }
+    #fmFountainProcessVisual .ff-step:hover { border-color: var(--ff-teal); color: var(--ff-fg); }
+    #fmFountainProcessVisual .ff-step[aria-pressed="true"] { border-color: var(--ff-teal); background: var(--ff-surface-2); color: var(--ff-fg); box-shadow: 0 0 0 2px color-mix(in srgb, var(--ff-teal) 20%, transparent); }
+    #fmFountainProcessVisual .ff-step strong { display: block; color: var(--ff-teal); font: 500 10px ui-monospace, monospace; margin-bottom: 8px; }
+    #fmFountainProcessVisual .ff-step span { display: block; font-size: 12px; line-height: 1.25; }
+    #fmFountainProcessVisual .ff-detail { display: grid; grid-template-columns: 1.1fr .9fr; gap: 14px; margin-top: 16px; }
+    #fmFountainProcessVisual .ff-detail-main, #fmFountainProcessVisual .ff-detail-side { background: var(--ff-surface); border: 1px solid var(--ff-line); border-radius: 12px; padding: 16px; }
+    #fmFountainProcessVisual .ff-detail h3 { margin: 0 0 7px; font-size: 15px; font-weight: 600; }
+    #fmFountainProcessVisual .ff-detail-main p { max-width: 620px; }
+    #fmFountainProcessVisual .ff-signals { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 15px; }
+    #fmFountainProcessVisual .ff-signal { border: 1px solid var(--ff-line); color: var(--ff-muted); padding: 6px 8px; border-radius: 999px; font: 500 10px ui-monospace, monospace; }
+    #fmFountainProcessVisual .ff-signal.accent { color: var(--ff-teal); border-color: color-mix(in srgb, var(--ff-teal) 65%, var(--ff-line)); }
+    #fmFountainProcessVisual .ff-side-row { display: flex; justify-content: space-between; gap: 14px; padding: 9px 0; border-bottom: 1px solid var(--ff-line); font-size: 11px; }
+    #fmFountainProcessVisual .ff-side-row:last-child { border-bottom: 0; padding-bottom: 0; }
+    #fmFountainProcessVisual .ff-side-row span { color: var(--ff-muted); }
+    #fmFountainProcessVisual .ff-side-row strong { font-weight: 600; text-align: right; }
+    #fmFountainProcessVisual .ff-side-row strong.copper { color: var(--ff-copper); }
+    @media (max-width: 650px) { #fmFountainProcessVisual { padding: 14px; } #fmFountainProcessVisual .ff-head { display: block; } #fmFountainProcessVisual .ff-head p { text-align: left; margin-top: 7px; } #fmFountainProcessVisual .ff-steps { grid-template-columns: repeat(2, 1fr); } #fmFountainProcessVisual .ff-steps::before { display: none; } #fmFountainProcessVisual .ff-detail { grid-template-columns: 1fr; } }
+  </style>
+  <div class="ff-head">
+    <div><div class="ff-kicker">Fountain process</div><h2>从一句意图到可复用资产</h2></div>
+    <p>模型只在执行阶段出现；用户掌握 World、Contract、批准和结算。</p>
+  </div>
+  <div class="ff-steps" role="list" aria-label="Fountain stages">
+    <button type="button" class="ff-step" aria-pressed="true" data-ff-step="0"><strong>01 / intent</strong><span>说出下一幕</span></button>
+    <button type="button" class="ff-step" aria-pressed="false" data-ff-step="1"><strong>02 / world</strong><span>选角色与事实</span></button>
+    <button type="button" class="ff-step" aria-pressed="false" data-ff-step="2"><strong>03 / contract</strong><span>锁定不能变的</span></button>
+    <button type="button" class="ff-step" aria-pressed="false" data-ff-step="3"><strong>04 / preview</strong><span>低成本看方向</span></button>
+    <button type="button" class="ff-step" aria-pressed="false" data-ff-step="4"><strong>05 / final</strong><span>实际成本结算</span></button>
+    <button type="button" class="ff-step" aria-pressed="false" data-ff-step="5"><strong>06 / promote</strong><span>决定什么留下</span></button>
+  </div>
+  <div class="ff-detail" aria-live="polite">
+    <section class="ff-detail-main"><h3 id="ffProcessTitle">意图先于设置</h3><p id="ffProcessDescription">用户输入“Lamo 穿过淹水市场去找 Hel”，不需要知道用了哪个模型，也不必先填写一份世界百科。</p><div class="ff-signals"><span class="ff-signal accent" id="ffProcessValue">用户控制：叙事方向</span><span class="ff-signal" id="ffProcessAction">下一步：选择 World 或 Scratch</span></div></section>
+    <aside class="ff-detail-side"><div class="ff-side-row"><span>用户看到</span><strong id="ffProcessVisible">一句自然语言</strong></div><div class="ff-side-row"><span>系统产物</span><strong id="ffProcessSystem">intent</strong></div><div class="ff-side-row"><span>收费边界</span><strong class="copper" id="ffProcessBilling">尚未扣费</strong></div></aside>
+  </div>
+  <script>
+    (() => {
+      const root = document.getElementById('fmFountainProcessVisual');
+      const stages = [
+        { title: '意图先于设置', description: '用户输入“Lamo 穿过淹水市场去找 Hel”，不需要知道用了哪个模型，也不必先填写一份世界百科。', value: '用户控制：叙事方向', action: '下一步：选择 World 或 Scratch', visible: '一句自然语言', system: 'intent', billing: '尚未扣费' },
+        { title: 'World 提供可复用状态', description: '选择 Lamo、Hel 和淹水市场；系统带入已确认事实、当前关系和批准参考集。', value: '用户控制：使用哪些实体', action: '下一步：查看当前状态', visible: '角色、地点、事实', system: 'entity versions + canon', billing: '尚未扣费' },
+        { title: 'Contract 把承诺说清楚', description: '生成前列出必须保留、允许变化、冲突和最高估算；用户先确认，不接受黑箱扣费。', value: '用户控制：硬约束与预算', action: '下一步：确认最高估算', visible: '必须保留 / 可变化', system: 'creative contract', billing: '原子预留最高额' },
+        { title: 'Preview 是方向检查', description: '快速执行器生成短片段，用户先判断动作、节奏和构图；不喜欢时调整方向，而不是盲目烧 Final。', value: '用户控制：接受方向', action: '下一步：接受 Preview 或修改', visible: '5 秒 Preview', system: 'provider attempt + validation', billing: '按可用结果结算' },
+        { title: 'Final 是可交付生成', description: '只有用户接受方向才进入更高控制度的 Final；FM 隐藏模型差异，显示真实 provider 成本和平台费用。', value: '用户控制：是否做成品', action: '下一步：查看可交付结果', visible: 'Final 结果与账单', system: 'artifact + settlement', billing: '真实成本 + FM 费用' },
+        { title: 'Promote 让价值流回 World', description: '用户可以接受媒体但不写 Canon，也可以逐条确认新事实和关系。被确认的内容才让下一次生成更强。', value: '用户控制：哪些事实留下', action: '循环：下一次生成少重讲', visible: 'Canon diff + 资产版本', system: 'approved canon + references', billing: '常规下载不重复收费' }
+      ];
+      const title = document.getElementById('ffProcessTitle');
+      const description = document.getElementById('ffProcessDescription');
+      const value = document.getElementById('ffProcessValue');
+      const action = document.getElementById('ffProcessAction');
+      const visible = document.getElementById('ffProcessVisible');
+      const system = document.getElementById('ffProcessSystem');
+      const billing = document.getElementById('ffProcessBilling');
+      const render = (index) => {
+        const stage = stages[index];
+        root.querySelectorAll('[data-ff-step]').forEach((button) => button.setAttribute('aria-pressed', String(Number(button.dataset.ffStep) === index)));
+        title.textContent = stage.title;
+        description.textContent = stage.description;
+        value.textContent = stage.value;
+        action.textContent = stage.action;
+        visible.textContent = stage.visible;
+        system.textContent = stage.system;
+        billing.textContent = stage.billing;
+      };
+      root.querySelectorAll('[data-ff-step]').forEach((button) => button.addEventListener('click', () => render(Number(button.dataset.ffStep))));
+    })();
+  </script>
+</div>

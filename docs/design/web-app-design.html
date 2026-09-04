@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FableMaker Two — Fountain Room</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #091517;
+      --ink-2: #0d2023;
+      --panel: #12292c;
+      --panel-2: #173236;
+      --line: #2a4a4a;
+      --mist: #dcebe6;
+      --muted: #8fa8a1;
+      --teal: #6be0c6;
+      --teal-deep: #1e8f7f;
+      --copper: #e8a362;
+      --rose: #ee8e87;
+      --yellow: #e6ce77;
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: var(--ink); color: var(--mist); }
+    body { font-family: "Space Grotesk", sans-serif; letter-spacing: -.01em; }
+    button { font: inherit; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
+    .fm-shell { min-height: 100vh; background: radial-gradient(circle at 80% -10%, #1a4847 0, transparent 32%), var(--ink); }
+    .fm-toolbar { height: 68px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); padding: 0 30px; background: rgba(9, 21, 23, .92); position: sticky; top: 0; z-index: 5; }
+    .fm-wordmark { display: flex; align-items: center; gap: 12px; }
+    .fm-mark { width: 32px; height: 32px; border-radius: 10px 10px 18px 18px; background: linear-gradient(135deg, var(--teal), #b2f2cd); color: var(--ink); display: grid; place-items: center; font-family: Fraunces, serif; font-size: 18px; box-shadow: 0 0 28px rgba(107,224,198,.18); }
+    .fm-name { font-weight: 600; font-size: 15px; letter-spacing: .02em; }
+    .fm-kicker { color: var(--muted); font-size: 11px; margin-left: 2px; }
+    .fm-toolbar-actions { display: flex; align-items: center; gap: 10px; }
+    .fm-view-toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; gap: 2px; background: var(--ink-2); }
+    .fm-view-toggle button, .fm-icon-button { border: 0; color: var(--muted); background: transparent; cursor: pointer; padding: 7px 11px; border-radius: 999px; font-size: 12px; }
+    .fm-view-toggle button.active { background: var(--teal); color: var(--ink); }
+    .fm-user { display: flex; align-items: center; gap: 8px; color: var(--mist); font-size: 12px; }
+    .fm-avatar { width: 28px; height: 28px; display: grid; place-items: center; background: #2e5855; border-radius: 50%; color: var(--teal); font-family: Fraunces, serif; }
+    .fm-layout { display: grid; grid-template-columns: 228px minmax(0, 1fr); min-height: calc(100vh - 68px); }
+    .fm-rail { padding: 28px 16px; border-right: 1px solid var(--line); background: rgba(10,24,26,.7); }
+    .fm-rail-label { color: var(--muted); text-transform: uppercase; letter-spacing: .16em; font: 500 10px "DM Mono", monospace; padding: 0 13px 10px; }
+    .fm-nav { display: grid; gap: 4px; }
+    .fm-nav button { display: flex; align-items: center; gap: 11px; border: 0; background: transparent; color: var(--muted); padding: 11px 13px; border-radius: 11px; text-align: left; cursor: pointer; font-size: 13px; }
+    .fm-nav button:hover { background: rgba(107,224,198,.08); color: var(--mist); }
+    .fm-nav button.active { color: var(--mist); background: #173436; box-shadow: inset 3px 0 0 var(--teal); }
+    .fm-nav-icon { width: 20px; color: var(--teal); font-family: "DM Mono", monospace; font-size: 11px; }
+    .fm-rail-note { margin: 42px 8px 0; border-top: 1px solid var(--line); padding: 16px 5px; color: var(--muted); font-size: 11px; line-height: 1.55; }
+    .fm-rail-note strong { display: block; color: var(--mist); margin-bottom: 7px; font-weight: 500; }
+    .fm-main { padding: 32px clamp(22px, 4vw, 64px) 80px; max-width: 1440px; width: 100%; margin: 0 auto; }
+    .fm-page { display: none; animation: fm-rise .34s ease both; }
+    .fm-page.active { display: block; }
+    @keyframes fm-rise { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+    .fm-page-head { display: flex; align-items: end; justify-content: space-between; gap: 22px; margin-bottom: 28px; }
+    .fm-eyebrow { color: var(--teal); font: 500 10px "DM Mono", monospace; letter-spacing: .18em; text-transform: uppercase; }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font: 600 clamp(32px, 4vw, 56px)/.98 Fraunces, serif; letter-spacing: -.045em; margin-top: 10px; }
+    h2 { font: 500 26px/1.1 Fraunces, serif; letter-spacing: -.025em; }
+    h3 { font-size: 14px; font-weight: 500; }
+    .fm-lede { color: var(--muted); font-size: 14px; line-height: 1.6; max-width: 560px; margin-top: 13px; }
+    .fm-button { border: 1px solid var(--line); color: var(--mist); background: var(--panel); padding: 11px 15px; border-radius: 10px; cursor: pointer; font-size: 12px; white-space: nowrap; }
+    .fm-button:hover { border-color: var(--teal); }
+    .fm-button.primary { background: var(--teal); color: var(--ink); border-color: var(--teal); font-weight: 600; }
+    .fm-button.copper { background: var(--copper); color: var(--ink); border-color: var(--copper); font-weight: 600; }
+    .fm-button.ghost { background: transparent; }
+    .fm-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .fm-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .fm-surface { background: rgba(18,41,44,.92); border: 1px solid var(--line); border-radius: var(--radius); }
+    .fm-world-card { min-height: 210px; padding: 21px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; cursor: pointer; }
+    .fm-world-card:hover { border-color: #5c9489; transform: translateY(-2px); transition: .2s ease; }
+    .fm-world-card::after { content: ""; width: 170px; height: 170px; border: 1px solid rgba(107,224,198,.26); border-radius: 50%; position: absolute; right: -50px; bottom: -84px; box-shadow: 0 0 0 19px rgba(107,224,198,.035), 0 0 0 39px rgba(107,224,198,.03); }
+    .fm-world-card h2 { font-size: 28px; position: relative; z-index: 1; }
+    .fm-world-meta { display: flex; gap: 8px; flex-wrap: wrap; color: var(--muted); font-size: 11px; position: relative; z-index: 1; }
+    .fm-world-foot { display: flex; justify-content: space-between; align-items: end; position: relative; z-index: 1; }
+    .fm-world-foot small { color: var(--muted); font-size: 11px; }
+    .fm-new-world { min-height: 210px; border: 1px dashed #426661; border-radius: var(--radius); display: grid; place-items: center; align-content: center; gap: 8px; color: var(--muted); background: rgba(15,33,35,.52); cursor: pointer; }
+    .fm-new-world b { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid var(--teal); border-radius: 50%; color: var(--teal); font-size: 19px; font-weight: 400; }
+    .fm-section-head { display: flex; align-items: center; justify-content: space-between; margin: 42px 0 15px; }
+    .fm-section-head p { color: var(--muted); font-size: 12px; }
+    .fm-activity { border-top: 1px solid var(--line); }
+    .fm-activity-row { display: grid; grid-template-columns: 30px minmax(0, 1fr) 110px 90px; gap: 14px; align-items: center; padding: 16px 4px; border-bottom: 1px solid rgba(42,74,74,.65); }
+    .fm-signal { width: 9px; height: 9px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 5px rgba(107,224,198,.1); margin-left: 8px; }
+    .fm-signal.copper { background: var(--copper); box-shadow: 0 0 0 5px rgba(232,163,98,.1); }
+    .fm-activity-title { color: var(--mist); font-size: 13px; }
+    .fm-activity-copy { color: var(--muted); font-size: 11px; margin-top: 4px; }
+    .fm-status { color: var(--teal); font: 500 10px "DM Mono", monospace; text-transform: uppercase; letter-spacing: .08em; }
+    .fm-time { color: var(--muted); font-size: 11px; text-align: right; }
+    .fm-fountain-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 18px; }
+    .fm-fountain-panel { padding: 25px 27px; min-height: 550px; }
+    .fm-world-title-row { display: flex; justify-content: space-between; align-items: start; gap: 20px; }
+    .fm-world-title-row h1 { font-size: 42px; }
+    .fm-small-stat { color: var(--muted); font-size: 11px; text-align: right; }
+    .fm-small-stat b { display: block; color: var(--mist); font: 500 20px Fraunces, serif; margin-top: 3px; }
+    .fm-fountain { position: relative; margin-top: 33px; padding-left: 33px; }
+    .fm-fountain::before { content: ""; position: absolute; left: 9px; top: 6px; bottom: 14px; width: 1px; background: linear-gradient(var(--teal), #4c756e 55%, transparent); }
+    .fm-event { position: relative; padding: 0 0 27px; }
+    .fm-event::before { content: ""; position: absolute; left: -29px; top: 4px; width: 9px; height: 9px; border-radius: 50%; background: var(--ink-2); border: 2px solid var(--teal); box-shadow: 0 0 0 5px rgba(107,224,198,.06); }
+    .fm-event.pending::before { border-color: var(--copper); }
+    .fm-event h3 { margin-bottom: 8px; }
+    .fm-event p { color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .fm-event .fm-inline-actions { margin-top: 11px; }
+    .fm-inline-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .fm-mini-button { border: 1px solid var(--line); border-radius: 7px; background: transparent; color: var(--muted); padding: 7px 9px; font-size: 11px; cursor: pointer; }
+    .fm-mini-button:hover { color: var(--mist); border-color: var(--teal); }
+    .fm-context { padding: 22px; }
+    .fm-context h3 { color: var(--muted); font: 500 10px "DM Mono", monospace; text-transform: uppercase; letter-spacing: .16em; margin-bottom: 18px; }
+    .fm-context-block { padding: 15px 0; border-top: 1px solid var(--line); }
+    .fm-context-label { color: var(--muted); font-size: 11px; display: flex; justify-content: space-between; }
+    .fm-context-value { color: var(--mist); font-size: 13px; margin-top: 6px; }
+    .fm-meter { height: 5px; background: #214144; border-radius: 8px; overflow: hidden; margin-top: 12px; }
+    .fm-meter span { display: block; width: 68%; height: 100%; background: var(--teal); }
+    .fm-entity-strip { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin-top: 18px; }
+    .fm-entity { background: var(--panel-2); border-radius: 12px; padding: 12px; border: 1px solid transparent; cursor: pointer; }
+    .fm-entity:hover { border-color: var(--teal); }
+    .fm-entity-art { height: 76px; border-radius: 8px; margin-bottom: 10px; background: radial-gradient(circle at 60% 32%, #d99b70 0 12%, transparent 13%), linear-gradient(145deg,#274e4b,#142a32 48%,#29364a); }
+    .fm-entity:nth-child(2) .fm-entity-art { background: radial-gradient(ellipse at 60% 65%, #c4a562 0 12%, transparent 13%), linear-gradient(145deg,#1b4c4f,#0f202d); }
+    .fm-entity:nth-child(3) .fm-entity-art { background: radial-gradient(circle at 45% 55%, #8cc3be 0 11%, transparent 12%), linear-gradient(145deg,#314a4c,#1a253d); }
+    .fm-entity small { display: block; color: var(--muted); font-size: 10px; margin-top: 3px; }
+    .fm-contract-layout { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 18px; align-items: start; }
+    .fm-form { padding: 25px; }
+    .fm-form label { display: block; color: var(--muted); font: 500 10px "DM Mono", monospace; text-transform: uppercase; letter-spacing: .12em; margin-bottom: 8px; }
+    .fm-form textarea, .fm-form input { width: 100%; border: 1px solid var(--line); border-radius: 10px; background: #0d2023; color: var(--mist); padding: 13px; font: 13px/1.55 "Space Grotesk", sans-serif; resize: vertical; }
+    .fm-form textarea { min-height: 130px; }
+    .fm-form-group { margin-bottom: 21px; }
+    .fm-chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .fm-chip { border: 1px solid var(--line); color: var(--muted); background: transparent; padding: 8px 10px; border-radius: 999px; font-size: 11px; cursor: pointer; }
+    .fm-chip.selected { border-color: var(--teal); background: rgba(107,224,198,.11); color: var(--teal); }
+    .fm-contract { padding: 22px; position: sticky; top: 95px; }
+    .fm-contract-head { display: flex; justify-content: space-between; align-items: center; }
+    .fm-contract-head h2 { font-size: 22px; }
+    .fm-contract-rule { margin: 20px 0; border-top: 1px solid var(--line); }
+    .fm-contract-item { padding: 11px 0; border-bottom: 1px solid rgba(42,74,74,.6); }
+    .fm-contract-item span { display: block; color: var(--muted); font-size: 10px; }
+    .fm-contract-item strong { display: block; color: var(--mist); font-size: 12px; font-weight: 500; margin-top: 5px; }
+    .fm-quote { background: #1d3936; border: 1px solid #41766a; border-radius: 10px; padding: 13px; margin: 18px 0; }
+    .fm-quote-line { display: flex; justify-content: space-between; color: var(--muted); font-size: 11px; }
+    .fm-quote-price { display: flex; justify-content: space-between; align-items: end; margin-top: 8px; }
+    .fm-quote-price b { color: var(--teal); font: 500 25px Fraunces, serif; }
+    .fm-quote-price span { color: var(--muted); font-size: 10px; }
+    .fm-result-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr); gap: 18px; }
+    .fm-preview { min-height: 470px; padding: 18px; background: #0c1e22; }
+    .fm-preview-canvas { height: 360px; border-radius: 12px; position: relative; overflow: hidden; background: radial-gradient(ellipse at 65% 66%, #d5a16c 0 4%, transparent 5%), radial-gradient(ellipse at 51% 57%, #ebc8a0 0 7%, transparent 8%), linear-gradient(135deg,#163f42 0%,#132934 42%,#5a3b45 100%); }
+    .fm-preview-canvas::before { content: "LAMO / HEL"; position: absolute; left: 17px; top: 15px; color: rgba(229,238,233,.72); font: 10px "DM Mono", monospace; letter-spacing: .18em; }
+    .fm-preview-canvas::after { content: "preview / 05s"; position: absolute; right: 17px; bottom: 15px; color: rgba(229,238,233,.65); font: 10px "DM Mono", monospace; }
+    .fm-preview-controls { display: flex; align-items: center; justify-content: space-between; padding-top: 14px; }
+    .fm-preview-controls p { color: var(--muted); font-size: 11px; }
+    .fm-diff { padding: 23px; }
+    .fm-diff h2 { font-size: 23px; margin-bottom: 18px; }
+    .fm-diff-row { display: grid; grid-template-columns: 16px 1fr; gap: 9px; padding: 13px 0; border-top: 1px solid var(--line); }
+    .fm-diff-mark { color: var(--teal); font: 500 13px "DM Mono", monospace; }
+    .fm-diff-mark.warn { color: var(--copper); }
+    .fm-diff-row p { color: var(--mist); font-size: 12px; line-height: 1.45; }
+    .fm-diff-row small { display: block; color: var(--muted); font-size: 10px; margin-top: 4px; }
+    .fm-wallet-grid { display: grid; grid-template-columns: 1.3fr .7fr; gap: 18px; }
+    .fm-wallet-balance { padding: 24px; background: linear-gradient(145deg,#17403c,#12282c); }
+    .fm-wallet-balance .fm-eyebrow { color: var(--copper); }
+    .fm-big-number { font: 500 55px/1 Fraunces, serif; margin: 12px 0 6px; }
+    .fm-wallet-caption { color: var(--muted); font-size: 12px; }
+    .fm-wallet-side { padding: 24px; }
+    .fm-wallet-side .fm-context-block:first-of-type { border-top: 0; padding-top: 0; }
+    .fm-ledger { margin-top: 24px; padding: 23px; }
+    .fm-ledger-row { display: grid; grid-template-columns: 1fr 105px 80px; gap: 10px; padding: 16px 0; border-top: 1px solid var(--line); align-items: center; }
+    .fm-ledger-row:first-child { border-top: 0; }
+    .fm-ledger-name { font-size: 12px; }
+    .fm-ledger-name small { display: block; color: var(--muted); font-size: 10px; margin-top: 4px; }
+    .fm-ledger-amount { text-align: right; font: 500 12px "DM Mono", monospace; }
+    .fm-ledger-status { text-align: right; color: var(--teal); font-size: 10px; }
+    .fm-mobile-nav { display: none; }
+    .fm-toast { position: fixed; right: 24px; bottom: 24px; padding: 12px 14px; border-radius: 10px; background: #21483f; border: 1px solid #4c9a83; color: var(--mist); font-size: 12px; opacity: 0; transform: translateY(7px); pointer-events: none; transition: .25s ease; z-index: 10; }
+    .fm-toast.show { opacity: 1; transform: translateY(0); }
+    @media (max-width: 840px) {
+      .fm-toolbar { padding: 0 18px; }
+      .fm-toolbar .fm-kicker, .fm-user span { display: none; }
+      .fm-layout { display: block; }
+      .fm-rail { display: none; }
+      .fm-main { padding: 27px 17px 100px; }
+      .fm-mobile-nav { display: grid; grid-template-columns: repeat(4, 1fr); position: fixed; bottom: 0; left: 0; right: 0; z-index: 6; padding: 8px 7px calc(8px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: rgba(9,21,23,.96); }
+      .fm-mobile-nav button { border: 0; background: transparent; color: var(--muted); font-size: 10px; padding: 6px 0; cursor: pointer; }
+      .fm-mobile-nav button.active { color: var(--teal); }
+      .fm-mobile-nav i { display: block; font: 500 11px "DM Mono", monospace; margin-bottom: 4px; }
+      .fm-page-head { align-items: start; flex-direction: column; gap: 16px; }
+      .fm-page-head .fm-button { align-self: stretch; }
+      h1 { font-size: 38px; }
+      .fm-grid, .fm-grid.two, .fm-wallet-grid { grid-template-columns: 1fr; }
+      .fm-world-card, .fm-new-world { min-height: 175px; }
+      .fm-fountain-layout, .fm-contract-layout, .fm-result-layout { grid-template-columns: 1fr; }
+      .fm-fountain-panel { padding: 21px 18px; min-height: auto; }
+      .fm-context, .fm-contract, .fm-form, .fm-diff, .fm-wallet-side, .fm-wallet-balance, .fm-ledger { padding: 19px; }
+      .fm-contract { position: static; }
+      .fm-world-title-row h1 { font-size: 35px; }
+      .fm-world-title-row { align-items: end; }
+      .fm-activity-row { grid-template-columns: 20px minmax(0, 1fr) 65px; gap: 9px; }
+      .fm-activity-row .fm-time { display: none; }
+      .fm-entity-strip { gap: 7px; }
+      .fm-entity { padding: 8px; }
+      .fm-entity-art { height: 58px; }
+      .fm-preview-canvas { height: 260px; }
+      .fm-preview { min-height: auto; }
+      .fm-ledger-row { grid-template-columns: 1fr 75px; }
+      .fm-ledger-status { display: none; }
+      .fm-view-toggle { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+    #fmApp[data-viewport="mobile"] .fm-rail { display: none; }
+    #fmApp[data-viewport="mobile"] .fm-layout { display: block; }
+    #fmApp[data-viewport="mobile"] .fm-main { padding: 27px 17px 100px; max-width: 540px; }
+    #fmApp[data-viewport="mobile"] .fm-mobile-nav { display: grid; grid-template-columns: repeat(4, 1fr); position: fixed; bottom: 0; left: 0; right: 0; z-index: 6; padding: 8px 7px; border-top: 1px solid var(--line); background: rgba(9,21,23,.96); }
+    #fmApp[data-viewport="mobile"] .fm-mobile-nav button { border: 0; background: transparent; color: var(--muted); font-size: 10px; padding: 6px 0; cursor: pointer; }
+    #fmApp[data-viewport="mobile"] .fm-mobile-nav button.active { color: var(--teal); }
+    #fmApp[data-viewport="mobile"] .fm-mobile-nav i { display: block; font: 500 11px "DM Mono", monospace; margin-bottom: 4px; }
+    #fmApp[data-viewport="mobile"] .fm-page-head { align-items: start; flex-direction: column; gap: 16px; }
+    #fmApp[data-viewport="mobile"] .fm-page-head .fm-button { align-self: stretch; }
+    #fmApp[data-viewport="mobile"] .fm-grid, #fmApp[data-viewport="mobile"] .fm-grid.two, #fmApp[data-viewport="mobile"] .fm-wallet-grid { grid-template-columns: 1fr; }
+    #fmApp[data-viewport="mobile"] .fm-world-card, #fmApp[data-viewport="mobile"] .fm-new-world { min-height: 175px; }
+    #fmApp[data-viewport="mobile"] .fm-fountain-layout, #fmApp[data-viewport="mobile"] .fm-contract-layout, #fmApp[data-viewport="mobile"] .fm-result-layout { grid-template-columns: 1fr; }
+    #fmApp[data-viewport="mobile"] .fm-contract { position: static; }
+    #fmApp[data-viewport="mobile"] .fm-activity-row { grid-template-columns: 20px minmax(0, 1fr) 65px; gap: 9px; }
+    #fmApp[data-viewport="mobile"] .fm-activity-row .fm-time { display: none; }
+    #fmApp[data-viewport="mobile"] .fm-preview-canvas { height: 260px; }
+    #fmApp[data-viewport="mobile"] .fm-ledger-row { grid-template-columns: 1fr 75px; }
+    #fmApp[data-viewport="mobile"] .fm-ledger-status { display: none; }
+  </style>
+</head>
+<body>
+  <div class="fm-shell" id="fmApp">
+    <header class="fm-toolbar">
+      <div class="fm-wordmark">
+        <div class="fm-mark" aria-hidden="true">F</div>
+        <div><div class="fm-name">FableMaker</div><div class="fm-kicker">the fountain room</div></div>
+      </div>
+      <div class="fm-toolbar-actions">
+        <div class="fm-view-toggle" aria-label="Preview viewport">
+          <button type="button" class="active" data-viewport="desktop">Desktop</button>
+          <button type="button" data-viewport="mobile">Mobile</button>
+        </div>
+        <div class="fm-user"><div class="fm-avatar">N</div><span>no-sense / Lamo Hel</span></div>
+      </div>
+    </header>
+    <div class="fm-layout">
+      <aside class="fm-rail">
+        <div class="fm-rail-label">Make meaning</div>
+        <nav class="fm-nav" aria-label="Primary">
+          <button type="button" class="active" data-page="worlds"><span class="fm-nav-icon">01</span>Worlds</button>
+          <button type="button" data-page="dashboard"><span class="fm-nav-icon">02</span>World dashboard</button>
+          <button type="button" data-page="character"><span class="fm-nav-icon">03</span>Character passport</button>
+          <button type="button" data-page="create"><span class="fm-nav-icon">04</span>Create</button>
+          <button type="button" data-page="preview"><span class="fm-nav-icon">05</span>Preview &amp; review</button>
+          <button type="button" data-page="wallet"><span class="fm-nav-icon">06</span>Wallet</button>
+        </nav>
+        <div class="fm-rail-note"><strong>One promise</strong>Your world does not need to be re-explained every time. Lock the facts that cannot change.</div>
+      </aside>
+      <main class="fm-main">
+        <section class="fm-page active" data-content="worlds">
+          <div class="fm-page-head"><div><div class="fm-eyebrow">Your creative ground</div><h1>Worlds</h1><p class="fm-lede">A home for the characters, places and facts you want to carry into the next scene.</p></div><button type="button" class="fm-button primary" data-toast="World draft opened">+ Create a world</button></div>
+          <div class="fm-grid">
+            <article class="fm-world-card fm-surface" data-page-link="dashboard"><div><div class="fm-eyebrow">01 / active</div><h2>Lamo Hel</h2><div class="fm-world-meta"><span>mystic noir</span><span>·</span><span>3 entities</span></div></div><div class="fm-world-foot"><small>Last change 18 min ago<br/>Hel remembers the flood</small><span class="fm-status">open →</span></div></article>
+            <article class="fm-world-card fm-surface" data-page-link="dashboard"><div><div class="fm-eyebrow" style="color:var(--copper)">02 / quiet</div><h2>Salt Orchard</h2><div class="fm-world-meta"><span>folklore</span><span>·</span><span>7 entities</span></div></div><div class="fm-world-foot"><small>Last change yesterday<br/>No pending proposals</small><span class="fm-status">open →</span></div></article>
+            <button type="button" class="fm-new-world" data-toast="World draft opened"><b>+</b><span>Start a new world</span><small>name it first, fill it later</small></button>
+          </div>
+          <div class="fm-section-head"><div><h2>The fountain</h2><p>Recent decisions that make the next generation easier.</p></div><button type="button" class="fm-button ghost" data-page-link="dashboard">View activity</button></div>
+          <div class="fm-activity">
+            <div class="fm-activity-row"><div class="fm-signal"></div><div><div class="fm-activity-title">Lamo’s silver left eye is now Canon</div><div class="fm-activity-copy">Character Passport · confirmed by you</div></div><div class="fm-status">accepted</div><div class="fm-time">18 min ago</div></div>
+            <div class="fm-activity-row"><div class="fm-signal copper"></div><div><div class="fm-activity-title">Preview proposed a new place: Tide Tower</div><div class="fm-activity-copy">Lamo Hel · one fact waiting for review</div></div><div class="fm-status" style="color:var(--copper)">review</div><div class="fm-time">42 min ago</div></div>
+          </div>
+        </section>
+
+        <section class="fm-page" data-content="dashboard">
+          <div class="fm-page-head"><div><div class="fm-eyebrow">World / Lamo Hel</div><div class="fm-world-title-row"><h1>Lamo Hel</h1><div class="fm-small-stat">accepted changes<b>14</b></div></div><p class="fm-lede">Mystic noir where memory is a currency and every alliance has a cost.</p></div><button type="button" class="fm-button primary" data-page-link="create">Create in this world</button></div>
+          <div class="fm-fountain-layout">
+            <section class="fm-surface fm-fountain-panel"><div class="fm-eyebrow">World fountain / latest</div><div class="fm-fountain">
+              <article class="fm-event"><h3>Character fact accepted</h3><p>Lamo has a silver left eye. It cannot change without a deliberate Canon edit.</p><div class="fm-inline-actions"><button type="button" class="fm-mini-button" data-page-link="character">Open passport</button></div></article>
+              <article class="fm-event pending"><h3>New Preview needs a decision</h3><p>The scene keeps Lamo and Hel’s hostile relationship. It proposes that Hel lives beneath the Tide Tower.</p><div class="fm-inline-actions"><button type="button" class="fm-mini-button" data-page-link="preview">Review Preview</button><button type="button" class="fm-mini-button" data-toast="Proposal kept outside Canon">Keep as media only</button></div></article>
+              <article class="fm-event"><h3>Reference Set updated</h3><p>Three approved images now travel with Lamo into future generations.</p><div class="fm-entity-strip"><div class="fm-entity" data-page-link="character"><div class="fm-entity-art"></div><h3>Lamo</h3><small>character · v03</small></div><div class="fm-entity"><div class="fm-entity-art"></div><h3>Tide Tower</h3><small>location · proposed</small></div><div class="fm-entity"><div class="fm-entity-art"></div><h3>Silver eye</h3><small>object · accepted</small></div></div></article>
+            </div></section>
+            <aside class="fm-surface fm-context"><h3>World snapshot</h3><div class="fm-context-block"><div class="fm-context-label"><span>Current chapter</span><span style="color:var(--teal)">03</span></div><div class="fm-context-value">The flood remembers</div></div><div class="fm-context-block"><div class="fm-context-label"><span>Facts locked</span><span>8 / 10</span></div><div class="fm-meter"><span></span></div></div><div class="fm-context-block"><div class="fm-context-label"><span>Needs review</span><span style="color:var(--copper)">1</span></div><div class="fm-context-value">Tide Tower location</div></div><div class="fm-context-block"><div class="fm-context-label"><span>Available wallet</span><span style="color:var(--teal)">$12.40</span></div><div class="fm-context-value">Preview starts at $0.18 max</div></div></aside>
+          </div>
+        </section>
+
+        <section class="fm-page" data-content="character">
+          <div class="fm-page-head"><div><div class="fm-eyebrow">Lamo Hel / character passport</div><h1>Lamo</h1><p class="fm-lede">A passport for the character, not a single “consistent” image.</p></div><button type="button" class="fm-button primary" data-page-link="create">Use Lamo in a creation</button></div>
+          <div class="fm-grid two"><section class="fm-surface" style="padding:20px"><div class="fm-preview-canvas" style="height:260px"></div><div class="fm-section-head" style="margin-top:18px"><div><h2>Lamo / v03</h2><p>approved reference set · 3 images</p></div><button type="button" class="fm-button ghost" data-toast="Passport editor opened">Edit facts</button></div></section><section class="fm-surface" style="padding:22px"><div class="fm-eyebrow">Hard facts</div><div class="fm-activity" style="margin-top:15px"><div class="fm-activity-row" style="grid-template-columns:16px 1fr"><div class="fm-signal"></div><div><div class="fm-activity-title">Silver left eye</div><div class="fm-activity-copy">accepted · confirmed 18 min ago</div></div></div><div class="fm-activity-row" style="grid-template-columns:16px 1fr"><div class="fm-signal"></div><div><div class="fm-activity-title">Carries the flood key</div><div class="fm-activity-copy">accepted · chapter 02</div></div></div><div class="fm-activity-row" style="grid-template-columns:16px 1fr"><div class="fm-signal copper"></div><div><div class="fm-activity-title">Knows Hel’s true name</div><div class="fm-activity-copy" style="color:var(--copper)">proposed · not Canon</div></div></div></div><div class="fm-section-head"><div><h2>Relationship</h2><p>State can change by chapter.</p></div></div><div class="fm-surface" style="padding:14px;background:#0d2023"><div class="fm-context-label"><span>Lamo ↔ Hel</span><span style="color:var(--copper)">hostile</span></div><div class="fm-context-value">Last changed in chapter 02</div></div></section></div>
+        </section>
+
+        <section class="fm-page" data-content="create">
+          <div class="fm-page-head"><div><div class="fm-eyebrow">Create / Lamo Hel</div><h1>Make the next scene</h1><p class="fm-lede">Tell us what should happen. The Contract makes the important parts visible before money moves.</p></div></div>
+          <div class="fm-contract-layout"><section class="fm-surface fm-form"><div class="fm-form-group"><label for="intent">Your intent</label><textarea id="intent">Lamo crosses the flooded market at night to confront Hel beneath the Tide Tower.</textarea></div><div class="fm-form-group"><label>Use from this world</label><div class="fm-chip-row"><button type="button" class="fm-chip selected">Lamo / v03</button><button type="button" class="fm-chip selected">Hel / v02</button><button type="button" class="fm-chip selected">Flooded market</button><button type="button" class="fm-chip">Silver eye</button><button type="button" class="fm-chip">+ Add entity</button></div></div><div class="fm-form-group"><label>What can change?</label><div class="fm-chip-row"><button type="button" class="fm-chip selected">weather</button><button type="button" class="fm-chip selected">camera movement</button><button type="button" class="fm-chip">wardrobe detail</button></div></div><div class="fm-form-group"><label>Output</label><div class="fm-chip-row"><button type="button" class="fm-chip selected">Preview · 5s</button><button type="button" class="fm-chip">Final · 10s</button><button type="button" class="fm-chip">High control</button></div></div><button type="button" class="fm-button primary" style="width:100%" data-page-link="preview">Generate Preview</button></section><aside class="fm-surface fm-contract"><div class="fm-contract-head"><div><div class="fm-eyebrow">Creative Contract</div><h2>Before we make it</h2></div><span class="fm-status">draft</span></div><div class="fm-contract-rule"></div><div class="fm-contract-item"><span>Must preserve</span><strong>Lamo’s silver left eye</strong><strong>Lamo ↔ Hel remains hostile</strong></div><div class="fm-contract-item"><span>May change</span><strong>Weather, camera, wardrobe detail</strong></div><div class="fm-contract-item"><span>Reference set</span><strong>3 approved images · Lamo v03</strong></div><div class="fm-quote"><div class="fm-quote-line"><span>Maximum estimate</span><span>balance $12.40</span></div><div class="fm-quote-price"><b>$0.18</b><span>Preview / 5 sec</span></div></div><p style="color:var(--muted);font-size:10px;line-height:1.5">You are charged only after a usable result. Technical failure is not a creative opinion and is not charged.</p></aside></div>
+        </section>
+
+        <section class="fm-page" data-content="preview">
+          <div class="fm-page-head"><div><div class="fm-eyebrow">Lamo Hel / Preview 01</div><h1>Does this belong?</h1><p class="fm-lede">Accept the media, inspect the proposed facts, and choose what enters the World.</p></div><div class="fm-status">usable result · $0.14 settled</div></div>
+          <div class="fm-result-layout"><section class="fm-surface fm-preview"><div class="fm-preview-canvas"></div><div class="fm-preview-controls"><p>H3 Max Preview · 5 seconds<br/><span style="color:var(--teal)">All hard constraints passed</span></p><div class="fm-inline-actions"><button type="button" class="fm-button ghost" data-page-link="create">Try another Preview</button><button type="button" class="fm-button copper" data-toast="Media accepted; Canon remains unchanged">Accept media</button></div></div></section><aside class="fm-surface fm-diff"><div class="fm-eyebrow">Contract diff</div><h2>What changed?</h2><div class="fm-diff-row"><div class="fm-diff-mark">✓</div><div><p>Silver left eye preserved</p><small>hard constraint · passed</small></div></div><div class="fm-diff-row"><div class="fm-diff-mark">✓</div><div><p>Hostile relationship preserved</p><small>hard constraint · passed</small></div></div><div class="fm-diff-row"><div class="fm-diff-mark warn">+</div><div><p>Hel lives beneath Tide Tower</p><small>new fact · proposed only</small></div></div><div class="fm-diff-row"><div class="fm-diff-mark warn">!</div><div><p>Market is now called “Lowwater”</p><small>new label · proposed only</small></div></div><div class="fm-inline-actions" style="margin-top:22px"><button type="button" class="fm-button primary" data-toast="Selected facts promoted to Canon">Review &amp; promote facts</button><button type="button" class="fm-button ghost" data-toast="Media kept outside Canon">Keep media only</button></div></aside></div>
+        </section>
+
+        <section class="fm-page" data-content="wallet">
+          <div class="fm-page-head"><div><div class="fm-eyebrow">Wallet / transparent by design</div><h1>Your balance</h1><p class="fm-lede">No model maze. See what was reserved, what the provider used, and what FM settled.</p></div><button type="button" class="fm-button primary" data-toast="Top-up checkout opened">Add funds</button></div>
+          <div class="fm-wallet-grid"><section class="fm-surface fm-wallet-balance"><div class="fm-eyebrow">Available</div><div class="fm-big-number">$12.40</div><div class="fm-wallet-caption">$0.00 reserved · enough for about 68 Previews</div><div class="fm-meter" style="margin-top:24px"><span style="width:31%"></span></div></section><aside class="fm-surface fm-wallet-side"><div class="fm-context-block"><div class="fm-context-label"><span>This month</span><span>$7.62</span></div><div class="fm-context-value">14 usable results</div></div><div class="fm-context-block"><div class="fm-context-label"><span>Released</span><span style="color:var(--teal)">$2.18</span></div><div class="fm-context-value">Unused maximum estimates</div></div><div class="fm-context-block"><div class="fm-context-label"><span>Technical refunds</span><span>$0.00</span></div><div class="fm-context-value">No failed delivery charged</div></div></aside></div>
+          <section class="fm-surface fm-ledger"><div class="fm-section-head" style="margin:0 0 15px"><div><h2>Recent activity</h2><p>Each line is a generation event.</p></div><button type="button" class="fm-button ghost">Export ledger</button></div><div class="fm-ledger-row"><div class="fm-ledger-name">Preview · Lamo crosses the flooded market<small>Sep 01 · maximum $0.18 · actual provider $0.11 + FM $0.03</small></div><div class="fm-ledger-amount">−$0.14</div><div class="fm-ledger-status">settled</div></div><div class="fm-ledger-row"><div class="fm-ledger-name">Final · The flood remembers<small>Aug 31 · maximum $1.20 · actual provider $0.88 + FM $0.18</small></div><div class="fm-ledger-amount">−$1.06</div><div class="fm-ledger-status">settled</div></div><div class="fm-ledger-row"><div class="fm-ledger-name">Unused estimate released<small>Aug 31 · Final job #f-2041</small></div><div class="fm-ledger-amount" style="color:var(--teal)">+$0.14</div><div class="fm-ledger-status">released</div></div></section>
+        </section>
+      </main>
+    </div>
+    <nav class="fm-mobile-nav" aria-label="Mobile navigation"><button type="button" class="active" data-page="worlds"><i>01</i>Worlds</button><button type="button" data-page="dashboard"><i>02</i>Fountain</button><button type="button" data-page="create"><i>04</i>Create</button><button type="button" data-page="wallet"><i>06</i>Wallet</button></nav>
+    <div class="fm-toast" id="fmToast" aria-live="polite"></div>
+  </div>
+  <script>
+    (() => {
+      const root = document.getElementById('fmApp');
+      const toast = document.getElementById('fmToast');
+      const showToast = (message) => {
+        toast.textContent = message;
+        toast.classList.add('show');
+        window.clearTimeout(showToast.timer);
+        showToast.timer = window.setTimeout(() => toast.classList.remove('show'), 2200);
+      };
+      const openPage = (page) => {
+        root.querySelectorAll('[data-content]').forEach((section) => section.classList.toggle('active', section.dataset.content === page));
+        root.querySelectorAll('[data-page]').forEach((control) => control.classList.toggle('active', control.dataset.page === page));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+      root.querySelectorAll('[data-page]').forEach((control) => control.addEventListener('click', () => openPage(control.dataset.page)));
+      root.querySelectorAll('[data-page-link]').forEach((control) => control.addEventListener('click', () => openPage(control.dataset.pageLink)));
+      root.querySelectorAll('[data-toast]').forEach((control) => control.addEventListener('click', () => showToast(control.dataset.toast)));
+      root.querySelectorAll('.fm-chip').forEach((chip) => chip.addEventListener('click', () => chip.classList.toggle('selected')));
+      root.querySelectorAll('[data-viewport]').forEach((control) => control.addEventListener('click', () => {
+        root.dataset.viewport = control.dataset.viewport;
+        root.querySelectorAll('[data-viewport]').forEach((item) => item.classList.toggle('active', item === control));
+        showToast(control.dataset.viewport === 'mobile' ? 'Mobile layout selected' : 'Desktop layout selected');
+      }));
+    })();
+  </script>
+</body>
+</html>

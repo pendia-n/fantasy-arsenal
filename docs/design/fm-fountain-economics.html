@@ -1,0 +1,53 @@
+<div id="fmFountainEconomicsVisual">
+  <style>
+    #fmFountainEconomicsVisual { --fe-bg: light-dark(#f7fbf8, #0b1719); --fe-fg: light-dark(#16302f, #e5eee9); --fe-muted: light-dark(#55706a, #91aaa3); --fe-line: light-dark(#c9dcd5, #2a4a4a); --fe-surface: light-dark(#ffffff, #12292c); --fe-teal: light-dark(#147d6e, #6be0c6); --fe-copper: light-dark(#a05c20, #e8a362); --fe-rose: light-dark(#a84545, #ee8e87); color: var(--fe-fg); font-family: ui-sans-serif, system-ui, sans-serif; background: var(--fe-bg); padding: 18px; border-radius: 16px; }
+    #fmFountainEconomicsVisual * { box-sizing: border-box; }
+    #fmFountainEconomicsVisual h2, #fmFountainEconomicsVisual h3, #fmFountainEconomicsVisual p { margin: 0; }
+    #fmFountainEconomicsVisual h2 { font-size: 20px; font-weight: 600; letter-spacing: -.02em; }
+    #fmFountainEconomicsVisual h3 { font-size: 13px; font-weight: 600; }
+    #fmFountainEconomicsVisual p { color: var(--fe-muted); font-size: 11px; line-height: 1.5; }
+    #fmFountainEconomicsVisual .fe-head { display: flex; justify-content: space-between; align-items: end; gap: 12px; margin-bottom: 15px; }
+    #fmFountainEconomicsVisual .fe-kicker { color: var(--fe-copper); text-transform: uppercase; letter-spacing: .14em; font: 500 10px ui-monospace, monospace; margin-bottom: 7px; }
+    #fmFountainEconomicsVisual .fe-switch { display: flex; gap: 3px; padding: 3px; border: 1px solid var(--fe-line); border-radius: 999px; }
+    #fmFountainEconomicsVisual .fe-switch button { border: 0; background: transparent; color: var(--fe-muted); cursor: pointer; border-radius: 999px; padding: 7px 10px; font-size: 11px; }
+    #fmFountainEconomicsVisual .fe-switch button[aria-pressed="true"] { background: var(--fe-teal); color: var(--fe-bg); }
+    #fmFountainEconomicsVisual .fe-board { display: grid; grid-template-columns: 1.05fr 1fr; gap: 14px; }
+    #fmFountainEconomicsVisual .fe-lane { background: var(--fe-surface); border: 1px solid var(--fe-line); border-radius: 12px; padding: 15px; }
+    #fmFountainEconomicsVisual .fe-lane-head { display: flex; justify-content: space-between; gap: 10px; align-items: start; margin-bottom: 14px; }
+    #fmFountainEconomicsVisual .fe-lane-head span { color: var(--fe-muted); font: 500 10px ui-monospace, monospace; }
+    #fmFountainEconomicsVisual .fe-flow { display: grid; gap: 7px; }
+    #fmFountainEconomicsVisual .fe-flow-row { display: grid; grid-template-columns: 24px 1fr auto; gap: 9px; align-items: center; padding: 9px 0; border-top: 1px solid var(--fe-line); }
+    #fmFountainEconomicsVisual .fe-flow-row:first-child { border-top: 0; }
+    #fmFountainEconomicsVisual .fe-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--fe-teal); box-shadow: 0 0 0 4px color-mix(in srgb, var(--fe-teal) 14%, transparent); margin-left: 5px; }
+    #fmFountainEconomicsVisual .fe-dot.copper { background: var(--fe-copper); box-shadow: 0 0 0 4px color-mix(in srgb, var(--fe-copper) 14%, transparent); }
+    #fmFountainEconomicsVisual .fe-flow-row strong { font-size: 11px; font-weight: 600; }
+    #fmFountainEconomicsVisual .fe-flow-row small { display: block; color: var(--fe-muted); font-size: 10px; margin-top: 3px; }
+    #fmFountainEconomicsVisual .fe-amount { color: var(--fe-copper); font: 500 11px ui-monospace, monospace; white-space: nowrap; }
+    #fmFountainEconomicsVisual .fe-flywheel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 14px; }
+    #fmFountainEconomicsVisual .fe-loop { padding: 10px; border: 1px solid var(--fe-line); border-radius: 9px; background: color-mix(in srgb, var(--fe-teal) 6%, var(--fe-surface)); }
+    #fmFountainEconomicsVisual .fe-loop strong { display: block; color: var(--fe-teal); font: 500 10px ui-monospace, monospace; margin-bottom: 5px; }
+    #fmFountainEconomicsVisual .fe-loop span { font-size: 11px; line-height: 1.25; }
+    #fmFountainEconomicsVisual .fe-note { margin-top: 11px; color: var(--fe-muted); font-size: 10px; line-height: 1.45; }
+    #fmFountainEconomicsVisual .fe-note b { color: var(--fe-fg); font-weight: 600; }
+    @media (max-width: 650px) { #fmFountainEconomicsVisual .fe-head { display: block; } #fmFountainEconomicsVisual .fe-switch { margin-top: 11px; width: max-content; } #fmFountainEconomicsVisual .fe-board { grid-template-columns: 1fr; } }
+  </style>
+  <div class="fe-head"><div><div class="fe-kicker">Self-serve economics</div><h2 id="feTitle">B2C World：每次生成让下一次更值得</h2></div><div class="fe-switch" aria-label="Business lane"><button type="button" aria-pressed="true" data-fe-mode="b2c">B2C</button><button type="button" aria-pressed="false" data-fe-mode="b2b">B2B</button></div></div>
+  <div class="fe-board" aria-live="polite"><section class="fe-lane"><div class="fe-lane-head"><div><h3>用户价值流</h3><p id="feAudience">连载创作者</p></div><span>Fountain</span></div><div class="fe-flow"><div class="fe-flow-row"><div class="fe-dot"></div><div><strong>确认 World 状态</strong><small id="feStepOne">角色、关系、不可变事实</small></div><div class="fe-amount">$0</div></div><div class="fe-flow-row"><div class="fe-dot copper"></div><div><strong>快速 Preview</strong><small>先判断方向，再决定 Final</small></div><div class="fe-amount">$0.18 max</div></div><div class="fe-flow-row"><div class="fe-dot"></div><div><strong>接受并提升</strong><small id="feStepThree">媒体留下；事实逐条确认</small></div><div class="fe-amount">资产归用户</div></div></div><div class="fe-flywheel"><div class="fe-loop"><strong>01 / state</strong><span>少重讲</span></div><div class="fe-loop"><strong>02 / trust</strong><span>少盲试</span></div><div class="fe-loop"><strong>03 / reuse</strong><span>多复用</span></div></div></section><section class="fe-lane"><div class="fe-lane-head"><div><h3>FM 账单流</h3><p id="feBilling">预付钱包，不卖无限满意</p></div><span>可审计</span></div><div class="fe-flow"><div class="fe-flow-row"><div class="fe-dot copper"></div><div><strong>Reserve maximum</strong><small>余额足够才开始；队列失败可释放</small></div><div class="fe-amount">冻结上限</div></div><div class="fe-flow-row"><div class="fe-dot"></div><div><strong>Provider actual</strong><small>读取真实 usage.cost，不用猜测成本</small></div><div class="fe-amount">actual</div></div><div class="fe-flow-row"><div class="fe-dot"></div><div><strong>Settle &amp; release</strong><small>可用结果结算；差额回到账户</small></div><div class="fe-amount">差额释放</div></div></div><div class="fe-note"><b id="feGuardrail">技术失败不收费。</b> 文件可用但用户主观不喜欢，不做无限退款；用户可以用更便宜的 Preview 调整方向。</div></section></div>
+  <script>
+    (() => {
+      const root = document.getElementById('fmFountainEconomicsVisual');
+      const title = document.getElementById('feTitle');
+      const audience = document.getElementById('feAudience');
+      const stepOne = document.getElementById('feStepOne');
+      const stepThree = document.getElementById('feStepThree');
+      const billing = document.getElementById('feBilling');
+      const guardrail = document.getElementById('feGuardrail');
+      const copy = {
+        b2c: { title: 'B2C World：每次生成让下一次更值得', audience: '连载创作者', stepOne: '角色、关系、不可变事实', stepThree: '媒体留下；事实逐条确认', billing: '预付钱包，不卖无限满意', guardrail: '技术失败不收费。' },
+        b2b: { title: 'B2B Campaign：让返工变成可测量的成本', audience: '小型营销/创意团队', stepOne: '品牌事实、审批人、产品参考集', stepThree: '交付可追溯；品牌事实需批准', billing: '共享钱包，生成事件仍自助计费', guardrail: '技术失败不收费；团队能看到节省的返工时间。' }
+      };
+      const render = (mode) => { const item = copy[mode]; title.textContent = item.title; audience.textContent = item.audience; stepOne.textContent = item.stepOne; stepThree.textContent = item.stepThree; billing.textContent = item.billing; guardrail.textContent = item.guardrail; root.querySelectorAll('[data-fe-mode]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.feMode === mode))); };
+      root.querySelectorAll('[data-fe-mode]').forEach((button) => button.addEventListener('click', () => render(button.dataset.feMode)));
+    })();
+  </script>
+</div>
