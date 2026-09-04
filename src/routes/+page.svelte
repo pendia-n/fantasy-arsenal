@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import PublicHeader from '$lib/components/PublicHeader.svelte';
 	let theme = $state<'dark' | 'light'>('dark');
 	let view = $state<'overview' | 'create' | 'library'>('overview');
 	let output = $state<'story' | 'character' | 'image' | 'song' | 'video'>('story');
@@ -37,7 +38,7 @@
 </style>
 {#if !authenticated}
 	<div class:light={theme === 'light'} class="landing">
-		<header class="landing-nav"><a class="brand" href="/"><img src="/fm.svg" alt="" /><span>Fantasy Arsenal</span></a><nav><a href="/pricing">Pricing</a><a href="/about">About</a><button class="icon-button" aria-label="Toggle color theme" onclick={() => (theme = theme === 'dark' ? 'light' : 'dark')}>{theme === 'dark' ? '☼' : '☾'}</button><button class="outline" onclick={() => { authMode='signin'; authOpen=true; }}>Sign in</button><button class="primary" onclick={() => { authMode='signup'; authOpen=true; }}>Start keeping <span>↗</span></button></nav></header>
+		<PublicHeader {theme} onTheme={toggleTheme} onSignIn={() => { authMode='signin'; authOpen=true; }} onStart={() => { authMode='signup'; authOpen=true; }} />
 		<section class="landing-hero"><div class="landing-copy"><span class="eyebrow warm">A PRIVATE STUDIO FOR IMAGINATION</span><h2>Make a world<br /><em>worth keeping.</em></h2><p>Fantasy Arsenal turns a rough idea into a living world: characters with memory, scenes with consequence, and artifacts you can return to.</p><button class="primary large" onclick={() => { authMode='signup'; authOpen=true; }}>Create your first world <span>→</span></button></div><div class="landing-art"><div class="landing-star">✦</div><div class="landing-ring"></div><span>your idea<br />has a place<br />to grow</span></div></section>
 		<section id="about" class="landing-note"><span class="eyebrow">THE DIFFERENCE</span><h3>Not another prompt box.</h3><p>We clarify your idea first, then keep the approved characters, places, songs, images, and scenes together in one world.</p></section>
 		<section id="pricing" class="pricing"><div><span class="eyebrow warm">SIMPLE ACCESS</span><h3>Start small. Keep what matters.</h3></div><div class="price-card"><span class="eyebrow">FREE TRIAL</span><strong>$0</strong><p>1 world · 2 images/week · 10 text generations/week</p><button class="outline" onclick={() => { authMode='signup'; authOpen=true; }}>Try it</button></div><div class="price-card featured"><span class="eyebrow">CREATOR</span><strong>$8.99 <small>/ month</small></strong><p>1 world · persistent assets · image, song, and video generation</p><button class="primary" onclick={() => { authMode='signup'; authOpen=true; }}>Choose Creator</button></div></section>
