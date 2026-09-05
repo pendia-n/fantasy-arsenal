@@ -12,7 +12,7 @@ Every generation request follows: raw input -> paraphrase -> task prompt -> prov
 ## Creator
 
 - Paraphrase: `qwen/qwen3.6-35b-a3b`
-- General text: `meta/muse-spark-1.2-contributor`
+- General text: `meta/muse-spark-1.3`
 - Character text: `z-ai/glm-5.3-flash:batch`
 - Image: `meta/muse-image`
 - Music: `google/lyria-3-clip-preview`

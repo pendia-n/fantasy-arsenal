@@ -107,7 +107,7 @@ Top-up enabled
 Creator model routing:
 
 ```text
-Text: meta/muse-spark-1.2-contributor
+Text: meta/muse-spark-1.3
 Character text: deepseek/deepseek-v4-flash-0731
 Image: meta/muse-image
 Music: google/lyria-3-clip-preview
@@ -399,4 +399,3 @@ No MCP route or dependency exists
 - Do not allow negative balances.
 - Do not implement long-video encoding inside the Worker.
 - Do not add Team until the Free/Creator economics and World loop are proven.
-
